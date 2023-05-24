@@ -4,19 +4,19 @@ I've added support for a NNUE (halfkp_256x2-32-32) evaluation (nn.bin) via Danie
 
 The executable has been produced using Visual Studio 2022...the project files have been included.
 
-The executable (hakkapelitta.exe) and nnue binary (nn.bin) are located together in x64/Release folder.
+The executable (hakkapelitta.exe) and very strong nnue binary (nn.bin) are located in x64/Release folder.
 
-Any halfkp_256x2-32-32 NNUE can be used...see:
+For variety, any halfkp_256x2-32-32 NNUE can be used...see:
 
 https://github.com/FireFather/halfkp_256x2-32-32-nets 
 
 or
 
-https://tests.stockfishchess.org/nns to use a different net.
+https://tests.stockfishchess.org/nns for a different net.
 
-Compatible nets start on page 72-73 (approx.) with dates of 21-05-02 22:26:43 or earlier.
+SF-compatible nets start on page 72-73 (approx.) with dates of 21-05-02 22:26:43 or earlier.
 
-The nnue file size must = 20,530 KB (halfkp_256x2-32-32)
+Keep in mind: the nnue file size must = 20,530 KB (halfkp_256x2-32-32).
 
 ### Overview
 
