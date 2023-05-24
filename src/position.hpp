@@ -30,12 +30,12 @@
 #include "piece.hpp"
 
 /// @brief Represents a single board position.
-class Position
+class Board
 {
 public:
     /// @brief Constructs a Position from a given FEN string. This WILL fail if it is called before Bitboards::staticInitialize.
     /// @param fen The FEN string.
-    Position(const std::string& fen); 
+    Board(const std::string& fen); 
 
     /// @brief Get the piece on a given square.
     /// @param sq The square.
@@ -246,142 +246,142 @@ private:
     bool verifyBoardAndBitboards() const;
 };
 
-inline Piece Position::getBoard(Square sq) const 
+inline Piece Board::getBoard(Square sq) const 
 { 
     return mBoard[sq]; 
 }
 
-inline Bitboard Position::getBitboard(Color colour, Piece piece) const 
+inline Bitboard Board::getBitboard(Color colour, Piece piece) const 
 { 
     return mBitboards[piece + colour * 6]; 
 }
 
-inline Bitboard Position::getPieces(Color colour) const 
+inline Bitboard Board::getPieces(Color colour) const 
 { 
     return mBitboards[12 + colour]; 
 }
 
-inline Bitboard Position::getOccupiedSquares() const noexcept
+inline Bitboard Board::getOccupiedSquares() const noexcept
 { 
     return mBitboards[12] | mBitboards[13]; 
 }
 
-inline Bitboard Position::getFreeSquares() const noexcept
+inline Bitboard Board::getFreeSquares() const noexcept
 { 
     return ~getOccupiedSquares();
 }
 
-inline Color Position::getSideToMove() const noexcept
+inline Color Board::getSideToMove() const noexcept
 { 
     return mSideToMove; 
 }
 
-inline Square Position::getEnPassantSquare() const noexcept
+inline Square Board::getEnPassantSquare() const noexcept
 { 
     return mEnPassant; 
 }
 
-inline uint8_t Position::getCastlingRights() const noexcept
+inline uint8_t Board::getCastlingRights() const noexcept
 { 
     return mCastlingRights; 
 }
 
-inline uint8_t Position::getFiftyMoveDistance() const noexcept
+inline uint8_t Board::getFiftyMoveDistance() const noexcept
 { 
     return mFiftyMoveDistance; 
 }
 
-inline int8_t Position::getGamePhase() const noexcept
+inline int8_t Board::getGamePhase() const noexcept
 { 
     return mGamePhase; 
 }
 
-inline Bitboard Position::getPinnedPieces() const noexcept
+inline Bitboard Board::getPinnedPieces() const noexcept
 { 
     return mPinned; 
 }
 
-inline Bitboard Position::getDiscoveredCheckCandidates() const noexcept
+inline Bitboard Board::getDiscoveredCheckCandidates() const noexcept
 { 
     return mDcCandidates; 
 }
 
-inline HashKey Position::getHashKey() const noexcept
+inline HashKey Board::getHashKey() const noexcept
 { 
     return mHashKey;
 }
 
-inline HashKey Position::getPawnHashKey() const noexcept
+inline HashKey Board::getPawnHashKey() const noexcept
 { 
     return mPawnHashKey; 
 }
 
-inline HashKey Position::getMaterialHashKey() const noexcept
+inline HashKey Board::getMaterialHashKey() const noexcept
 { 
     return mMaterialHashKey; 
 }
 
-inline int8_t Position::getTotalPieceCount() const noexcept
+inline int8_t Board::getTotalPieceCount() const noexcept
 {
     return mTotalPieceCount;
 }
 
-inline int8_t Position::getPieceCount(Color color, Piece piece) const
+inline int8_t Board::getPieceCount(Color color, Piece piece) const
 { 
     return mPieceCounts[piece + color * 6]; 
 }
 
-inline int8_t Position::getNonPawnPieceCount(Color side) const
+inline int8_t Board::getNonPawnPieceCount(Color side) const
 {
     return mNonPawnPieceCounts[side];
 }
 
-inline int16_t Position::getPstScoreOp() const noexcept
+inline int16_t Board::getPstScoreOp() const noexcept
 {
     return mPstScoreOp;
 }
 
-inline int16_t Position::getPstScoreEd() const noexcept
+inline int16_t Board::getPstScoreEd() const noexcept
 {
     return mPstScoreEd;
 }
 
-inline int16_t Position::getGamePly() const noexcept
+inline int16_t Board::getGamePly() const noexcept
 {
     return mGamePly;
 }
 
-inline bool Position::inCheck() const 
+inline bool Board::inCheck() const 
 { 
     return isAttacked(Bitboards::lsb(getBitboard(mSideToMove, Piece::King)), !mSideToMove); 
 }
 
-inline Bitboard Position::discoveredCheckCandidates() const 
+inline Bitboard Board::discoveredCheckCandidates() const 
 { 
     return checkBlockers(mSideToMove, !mSideToMove); 
 }
 
-inline Bitboard Position::getRooksAndQueens() const noexcept
+inline Bitboard Board::getRooksAndQueens() const noexcept
 {
     return mBitboards[Piece::WhiteQueen] | mBitboards[Piece::BlackQueen] | mBitboards[Piece::WhiteRook] | mBitboards[Piece::BlackRook];
 }
 
-inline Bitboard Position::getRooksAndQueens(Color c) const
+inline Bitboard Board::getRooksAndQueens(Color c) const
 {
     return getBitboard(c, Piece::Queen) | getBitboard(c, Piece::WhiteRook);
 }
 
-inline Bitboard Position::getBishopsAndQueens() const noexcept
+inline Bitboard Board::getBishopsAndQueens() const noexcept
 {
     return mBitboards[Piece::WhiteQueen] | mBitboards[Piece::BlackQueen] | mBitboards[Piece::WhiteBishop] | mBitboards[Piece::BlackBishop];
 }
 
-inline Bitboard Position::getBishopsAndQueens(Color c) const
+inline Bitboard Board::getBishopsAndQueens(Color c) const
 {
     return getBitboard(c, Piece::Queen) | getBitboard(c, Piece::Bishop);
 }
 
-inline Bitboard Position::pinnedPieces(Color c) const 
+inline Bitboard Board::pinnedPieces(Color c) const 
 {
     return checkBlockers(c, c); 
 }

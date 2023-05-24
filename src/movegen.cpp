@@ -88,7 +88,7 @@ void addPawnCapturesFromMask(MoveList& moveList, Bitboard mask, Square ep, bool 
     }
 }
 
-void MoveGen::generatePseudoLegalMoves(const Position& pos, MoveList& moveList)
+void MoveGen::generatePseudoLegalMoves(const Board& pos, MoveList& moveList)
 {
     const auto side = pos.getSideToMove();
     const auto occupiedSquares = pos.getOccupiedSquares();
@@ -178,7 +178,7 @@ void MoveGen::generatePseudoLegalMoves(const Position& pos, MoveList& moveList)
     }
 }
 
-void MoveGen::generateLegalEvasions(const Position& pos, MoveList& moveList)
+void MoveGen::generateLegalEvasions(const Board& pos, MoveList& moveList)
 {
     assert(pos.inCheck());
 
@@ -268,7 +268,7 @@ void MoveGen::generateLegalEvasions(const Position& pos, MoveList& moveList)
     }
 }
 
-void MoveGen::generatePseudoLegalQuietMoves(const Position& pos, MoveList& moveList)
+void MoveGen::generatePseudoLegalQuietMoves(const Board& pos, MoveList& moveList)
 {
     const auto side = pos.getSideToMove();
     const auto freeSquares = pos.getFreeSquares();
@@ -349,7 +349,7 @@ void MoveGen::generatePseudoLegalQuietMoves(const Position& pos, MoveList& moveL
     }
 }
 
-void MoveGen::generatePseudoLegalCapturesAndQuietChecks(const Position& pos, MoveList& moveList)
+void MoveGen::generatePseudoLegalCapturesAndQuietChecks(const Board& pos, MoveList& moveList)
 {
     const auto side = pos.getSideToMove();
     const auto occupied = pos.getOccupiedSquares();
@@ -441,7 +441,7 @@ void MoveGen::generatePseudoLegalCapturesAndQuietChecks(const Position& pos, Mov
     }
 }
 
-void MoveGen::generatePseudoLegalCaptures(const Position& pos, MoveList& moveList, bool underPromotions)
+void MoveGen::generatePseudoLegalCaptures(const Board& pos, MoveList& moveList, bool underPromotions)
 {
     const auto side = pos.getSideToMove();
     const auto enemyPieces = pos.getPieces(!side);

@@ -39,24 +39,24 @@ public:
     void mainLoop();
 
 private:
-    using FunctionPointer = void(UCI::*)(Position& pos, std::istringstream& iss);
+    using FunctionPointer = void(UCI::*)(Board& pos, std::istringstream& iss);
 
     void addCommand(const std::string& name, FunctionPointer fp);
     std::map<std::string, FunctionPointer> commands;
 
     // UCI commands.
 
-    void sendInformation(Position& pos, std::istringstream& iss);
-    void isReady(Position& pos, std::istringstream& iss);
-    void stop(Position& pos, std::istringstream& iss);
-    void quit(Position& pos, std::istringstream& iss);
-    void setOption(Position& pos, std::istringstream& iss);
-    void newGame(Position& pos, std::istringstream& iss);
-    void position(Position& pos, std::istringstream& iss);
-    void go(Position& pos, std::istringstream& iss);
-    void ponderhit(Position& pos, std::istringstream& iss);
-    void displayBoard(Position& pos, std::istringstream& iss);
-    void perft(Position& pos, std::istringstream& iss);
+    void sendInformation(Board& pos, std::istringstream& iss);
+    void isReady(Board& pos, std::istringstream& iss);
+    void stop(Board& pos, std::istringstream& iss);
+    void quit(Board& pos, std::istringstream& iss);
+    void setOption(Board& pos, std::istringstream& iss);
+    void newGame(Board& pos, std::istringstream& iss);
+    void position(Board& pos, std::istringstream& iss);
+    void go(Board& pos, std::istringstream& iss);
+    void ponderhit(Board& pos, std::istringstream& iss);
+    void displayBoard(Board& pos, std::istringstream& iss);
+    void perft(Board& pos, std::istringstream& iss);
 
     Search search;
     synchronized_ostream sync_cout;

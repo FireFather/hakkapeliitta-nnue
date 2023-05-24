@@ -19,7 +19,7 @@
 #include <sstream>
 #include "utils/stopwatch.hpp"
 
-std::pair<uint64_t, uint64_t> Benchmark::runPerft(const Position& pos, int depth)
+std::pair<uint64_t, uint64_t> Benchmark::runPerft(const Board& pos, int depth)
 {
     Stopwatch sw;
 
@@ -56,7 +56,7 @@ std::pair<uint64_t, uint64_t> Benchmark::testPerft()
     for (auto i = 0; i < 7; ++i)
     {
         auto& test = tests[i];
-        Position pos(test.mFen);
+        Board pos(test.mFen);
         const auto result = perft(pos, test.mDepth, pos.inCheck());
         total += result;
         if (result != test.mResult)
@@ -71,7 +71,7 @@ std::pair<uint64_t, uint64_t> Benchmark::testPerft()
     return std::make_pair(total, sw.elapsed<std::chrono::milliseconds>());
 }
 
-uint64_t Benchmark::perft(const Position& pos, int depth, bool inCheck)
+uint64_t Benchmark::perft(const Board& pos, int depth, bool inCheck)
 {
     MoveList moveList;
     auto nodes = 0ULL; 
@@ -91,7 +91,7 @@ uint64_t Benchmark::perft(const Position& pos, int depth, bool inCheck)
             continue;
         }
 
-        Position newPos(pos);
+        Board newPos(pos);
         newPos.makeMove(move);
         nodes += depth == 1 ? 1 : perft(newPos, depth - 1, newPos.inCheck());
     }

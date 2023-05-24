@@ -50,7 +50,7 @@ public:
     /// Oh yeah, this function only starts the search, the actual searching is done by a different thread.
     /// Also, this function blocks until the search has started to prevent some problems.
     /// Usually the blocking time is very short, 5-10ms at most.
-    void go(const Position& root, const SearchParameters& sp);
+    void go(const Board& root, const SearchParameters& sp);
 
     /// @brief Clears the TT, PHT, killer table, history table and the counter move table. 
     ///
@@ -104,12 +104,12 @@ private:
     SearchListener& listener;
     Stopwatch sw;
 
-    void think(const Position& root, SearchParameters searchParameters);
+    void think(const Board& root, SearchParameters searchParameters);
 
     template <bool pvNode>
-    int search(const Position& pos, int depth, int alpha, int beta, bool inCheck, SearchStack* ss);
+    int search(const Board& pos, int depth, int alpha, int beta, bool inCheck, SearchStack* ss);
 
-    int quiescenceSearch(const Position& pos, int depth, int alpha, int beta, bool inCheck, SearchStack* ss);
+    int quiescenceSearch(const Board& pos, int depth, int alpha, int beta, bool inCheck, SearchStack* ss);
 
     // Time allocation variables.
     bool searchNeedsMoreTime;
@@ -141,7 +141,7 @@ private:
     // If you think about it for a while, you notice that 2-fold is all we need.
     int rootPly;
     std::vector<HashKey> repetitionHashes;
-    bool repetitionDraw(const Position& pos, int ply) const;
+    bool repetitionDraw(const Board& pos, int ply) const;
 
     // Used for changing the values of draws inside the search.
     std::array<int, 2> contempt;
@@ -157,13 +157,13 @@ private:
     std::condition_variable waitCv;
 
     // Used for ordering root moves.
-    void orderRootMoves(const Position& pos, MoveList& moveList, const Move& ttMove) const;
+    void orderRootMoves(const Board& pos, MoveList& moveList, const Move& ttMove) const;
 
     // Used for ordering captures in the quiescence search.
-    void orderCaptures(const Position& pos, MoveList& moveList, const Move& ttMove) const;
+    void orderCaptures(const Board& pos, MoveList& moveList, const Move& ttMove) const;
 
     // Used for getting the PV out of the TT:
-    std::vector<Move> extractPv(const Position& root) const;
+    std::vector<Move> extractPv(const Board& root) const;
 };
 
 inline void Search::clearSearch() 

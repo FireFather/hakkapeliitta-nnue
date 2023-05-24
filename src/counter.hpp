@@ -37,13 +37,13 @@ public:
     /// @param pos The position.
     /// @param move The new counter move.
     /// @param opponentMove The opponent move which was countered.
-    void update(const Position& pos, const Move& move, const Move& opponentMove);
+    void update(const Board& pos, const Move& move, const Move& opponentMove);
 
     /// @brief Get the counter move of a given move.
     /// @param pos The position.
     /// @param move The move.
     /// @return The countermove.
-    Move getCounterMove(const Position& pos, const Move& move) const;
+    Move getCounterMove(const Board& pos, const Move& move) const;
 
     /// @brief Clears the counter move table.
     void clear();

@@ -27,6 +27,7 @@
 #include "square.hpp"
 #include "color.hpp"
 #include "piece.hpp"
+#include <intrin.h>
 
 /// @brief A bitboard is just a quadword, so let's do a simple typedef for convenience. Why am I even commenting this?
 using Bitboard = uint64_t;

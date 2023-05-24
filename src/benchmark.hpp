@@ -35,7 +35,7 @@ public:
     /// @param pos The position.
     /// @param depth The depth.
     /// @return A pair of the perft result and the time it took to calculate it, in ms.
-    static std::pair<uint64_t, uint64_t> runPerft(const Position& pos, int depth);
+    static std::pair<uint64_t, uint64_t> runPerft(const Board& pos, int depth);
 
     /// @brief Runs perft on a predetermined set of positions. 
     /// @return A pair of the nodes searched and the time it took to calculate it, in ms.
@@ -44,7 +44,7 @@ public:
     static std::pair<uint64_t, uint64_t> testPerft();
 
 private:
-    static uint64_t perft(const Position& pos, int depth, bool inCheck);
+    static uint64_t perft(const Board& pos, int depth, bool inCheck);
 };
 
 #endif

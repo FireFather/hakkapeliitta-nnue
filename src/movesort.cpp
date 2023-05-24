@@ -26,7 +26,7 @@ enum Phase {
     Stop
 };
 
-MoveSort::MoveSort(const Position& pos, const HistoryTable& historyTable, Move ttMove, Move k1, Move k2, Move counter, bool inCheck) :
+MoveSort::MoveSort(const Board& pos, const HistoryTable& historyTable, Move ttMove, Move k1, Move k2, Move counter, bool inCheck) :
 mPos(pos), mHistoryTable(historyTable), mTtMove(ttMove), mKiller1(k1), mKiller2(k2), mCounter(counter)
 {
     mPhase = inCheck ? Evasion : Normal;
@@ -203,7 +203,4 @@ void MoveSort::selectionSort(int startingLocation)
         mMoveList.setScore(bestLocation, s);
     }
 }
-
-
-
 

@@ -29,7 +29,7 @@
 /// @param out The ostream to print to.
 /// @param pos The position to print.
 /// @return A reference to the ostream to allow chaining.
-inline std::ostream& operator<<(std::ostream &out, const Position& pos)
+inline std::ostream& operator<<(std::ostream &out, const Board& pos)
 {
     static const auto pieceToMark = "PNBRQKpnbrqk.";
     std::stringstream ss;
@@ -53,7 +53,7 @@ inline std::ostream& operator<<(std::ostream &out, const Position& pos)
 /// @brief Used for getting the FEN-string of a position.
 /// @param pos The position.
 /// @return The FEN-string.
-inline std::string positionToFen(const Position& pos)
+inline std::string positionToFen(const Board& pos)
 {
     std::string fen;
 

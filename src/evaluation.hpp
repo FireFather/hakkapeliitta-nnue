@@ -26,6 +26,7 @@
 #include "zobrist.hpp"
 #include "endgame.hpp"
 #include "pht.hpp"
+#include "nnue/nnue.h"
 
 /// @brief The evaluation function.
 class Evaluation
@@ -37,7 +38,7 @@ public:
     /// @brief Evaluates a given position.
     /// @param pos The position.
     /// @return The heuristic score given to the position.
-    int evaluate(const Position& pos);
+    int evaluate(const Board& pos);
 
     /// @brief Clears the pawn hash table used by the evalation function.
     void clearPawnHashTable();
@@ -67,14 +68,14 @@ private:
     static std::array<std::array<short, 64>, 12> mPieceSquareTableEnding;
 
     template <bool hardwarePopcnt> 
-    int evaluate(const Position& pos);
+    int evaluate(const Board& pos);
 
     template <bool hardwarePopcnt> 
-    int mobilityEval(const Position& pos, std::array<int, 2>& kingSafetyScore, int phase);
+    int mobilityEval(const Board& pos, std::array<int, 2>& kingSafetyScore, int phase);
 
-    int pawnStructureEval(const Position& pos, int phase);
+    int pawnStructureEval(const Board& pos, int phase);
     // Static to get around a static analysis tool warning.
-    static int kingSafetyEval(const Position& pos, int phase, std::array<int, 2>& kingSafetyScore);
+    static int kingSafetyEval(const Board& pos, int phase, std::array<int, 2>& kingSafetyScore);
 };
 
 inline void Evaluation::clearPawnHashTable()

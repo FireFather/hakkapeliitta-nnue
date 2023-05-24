@@ -23,6 +23,7 @@
 #include "evaluation.hpp"
 #include "uci.hpp"
 #include "syzygy/tbprobe.hpp"
+#include "nnue/nnue.h"
 
 int main() 
 {
@@ -32,6 +33,7 @@ int main()
     Bitboards::staticInitialize();
     Zobrist::staticInitialize();
     Evaluation::staticInitialize();
+    nnue_init("nn.bin");
 
     if (Bitboards::hardwarePopcntSupported())
     {

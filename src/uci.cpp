@@ -45,7 +45,7 @@ syzygyProbeLimit(6), syzygy50MoveRule(true), rootPly(0)
 
 void UCI::mainLoop()
 {
-    Position pos("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    Board pos("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     std::string cmd;
 
     for (;;)
@@ -90,7 +90,7 @@ void UCI::addCommand(const std::string& name, FunctionPointer fp)
 
 // UCI commands.
 
-void UCI::sendInformation(Position&, std::istringstream&)
+void UCI::sendInformation(Board&, std::istringstream&)
 {
     // Send the name of the engine and the name of it's author.
     sync_cout << "id name Hakkapeliitta 3.0" << std::endl;
@@ -111,18 +111,18 @@ void UCI::sendInformation(Position&, std::istringstream&)
     sync_cout << "uciok" << std::endl;
 }
 
-void UCI::isReady(Position&, std::istringstream&)
+void UCI::isReady(Board&, std::istringstream&)
 {
     sync_cout << "readyok" << std::endl;
 }
 
-void UCI::stop(Position&, std::istringstream&)
+void UCI::stop(Board&, std::istringstream&)
 {
     search.stopPondering();
     search.stopSearching();
 }
 
-void UCI::quit(Position&, std::istringstream&)
+void UCI::quit(Board&, std::istringstream&)
 {
     search.stopPondering();
     search.stopSearching();
@@ -130,7 +130,7 @@ void UCI::quit(Position&, std::istringstream&)
     exit(0);
 }
 
-void UCI::setOption(Position&, std::istringstream& iss) 
+void UCI::setOption(Board&, std::istringstream& iss) 
 {
     std::string name, s;
     
@@ -195,12 +195,12 @@ void UCI::setOption(Position&, std::istringstream& iss)
     }
 }
 
-void UCI::newGame(Position&, std::istringstream&)
+void UCI::newGame(Board&, std::istringstream&)
 {
     search.clearSearch();
 }
 
-void UCI::go(Position& pos, std::istringstream& iss)
+void UCI::go(Board& pos, std::istringstream& iss)
 {
     SearchParameters searchParameters;
     std::string s;
@@ -231,7 +231,7 @@ void UCI::go(Position& pos, std::istringstream& iss)
     search.go(pos, searchParameters);
 }
 
-void UCI::position(Position& pos, std::istringstream& iss)
+void UCI::position(Board& pos, std::istringstream& iss)
 {
     std::string s, fen;
     rootPly = 0;
@@ -255,7 +255,7 @@ void UCI::position(Position& pos, std::istringstream& iss)
         return;
     }
 
-    pos = Position(fen);
+    pos = Board(fen);
 
     // Parse the moves.
     while (iss >> s)
@@ -289,17 +289,17 @@ void UCI::position(Position& pos, std::istringstream& iss)
     }
 }
 
-void UCI::ponderhit(Position&, std::istringstream&)
+void UCI::ponderhit(Board&, std::istringstream&)
 {
     search.stopPondering();
 }
 
-void UCI::displayBoard(Position& pos, std::istringstream&)
+void UCI::displayBoard(Board& pos, std::istringstream&)
 {
     sync_cout << pos << std::endl; 
 }
 
-void UCI::perft(Position& pos, std::istringstream& iss)
+void UCI::perft(Board& pos, std::istringstream& iss)
 {
     int depth;
 

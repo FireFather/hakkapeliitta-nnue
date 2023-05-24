@@ -31,17 +31,17 @@ void HistoryTable::clear()
     }
 }
 
-void HistoryTable::addCutoff(const Position& pos, const Move& move, const int depth)
+void HistoryTable::addCutoff(const Board& pos, const Move& move, const int depth)
 {
     mHistory[pos.getBoard(move.getFrom())][move.getTo()] += depth * depth;
 }
 
-void HistoryTable::addNotCutoff(const Position& pos, const Move& move, const int depth)
+void HistoryTable::addNotCutoff(const Board& pos, const Move& move, const int depth)
 {
     mButterfly[pos.getBoard(move.getFrom())][move.getTo()] += depth * depth;
 }
 
-int16_t HistoryTable::getScore(const Position& pos, const Move& move) const
+int16_t HistoryTable::getScore(const Board& pos, const Move& move) const
 {
     const auto hScore = mHistory[pos.getBoard(move.getFrom())][move.getTo()];
     const auto bScore = mButterfly[pos.getBoard(move.getFrom())][move.getTo()];

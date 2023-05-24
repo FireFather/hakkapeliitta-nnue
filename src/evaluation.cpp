@@ -18,8 +18,9 @@
 #include "evaluation.hpp"
 #include "piece.hpp"
 #include "color.hpp"
-#include "square.hpp"
+#include "Square.hpp"
 #include "utils/clamp.hpp"
+#include "color.hpp"
 
 std::array<std::array<short, 64>, 12> Evaluation::mPieceSquareTableOpening;
 std::array<std::array<short, 64>, 12> Evaluation::mPieceSquareTableEnding;
@@ -151,9 +152,87 @@ void Evaluation::staticInitialize()
     }
 }
 
-int Evaluation::evaluate(const Position& pos)
+int Evaluation::evaluate(const Board& pos)
 {
-    return (Bitboards::hardwarePopcntSupported() ? evaluate<true>(pos) : evaluate<false>(pos));
+    //acout() << pos;		
+    int pieces[33]{};
+    int squares[33]{};
+    int index = 2;
+    for (uint8_t i = 0; i < 64; i++)
+    {
+        if (pos.getBoard(static_cast<Square>(i)) == 5)
+        {
+            pieces[0] = 1;
+            squares[0] = i;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 11)
+        {
+            pieces[1] = 7;
+            squares[1] = i;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 0)
+        {
+            pieces[index] = 6;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 1)
+        {
+            pieces[index] = 5;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 2)
+        {
+            pieces[index] = 4;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 3)
+        {
+            pieces[index] = 3;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 4)
+        {
+            pieces[index] = 2;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 6)
+        {
+            pieces[index] = 12;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 7)
+        {
+            pieces[index] = 11;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 8)
+        {
+            pieces[index] = 10;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 9)
+        {
+            pieces[index] = 9;
+            squares[index] = i;
+            index++;
+        }
+        else if (pos.getBoard(static_cast<Square>(i)) == 10)
+        {
+            pieces[index] = 8;
+            squares[index] = i;
+            index++;
+        }
+    }
+    const int nnue_score = nnue_evaluate(pos.getSideToMove(), pieces, squares);
+    return nnue_score;
 }
 
 int interpolateScore(int scoreOp, int scoreEd, int phase)
@@ -162,7 +241,7 @@ int interpolateScore(int scoreOp, int scoreEd, int phase)
 }
 
 template <bool hardwarePopcnt> 
-int Evaluation::evaluate(const Position& pos)
+int Evaluation::evaluate(const Board& pos)
 {
     if (mEndgameModule.drawnEndgame(pos.getMaterialHashKey()))
     {
@@ -193,7 +272,7 @@ int Evaluation::evaluate(const Position& pos)
 }
 
 template <bool hardwarePopcnt> 
-int Evaluation::mobilityEval(const Position& pos, std::array<int, 2>& kingSafetyScore, int phase)
+int Evaluation::mobilityEval(const Board& pos, std::array<int, 2>& kingSafetyScore, int phase)
 {
     const auto occupied = pos.getOccupiedSquares();
     auto scoreOp = 0, scoreEd = 0;
@@ -271,7 +350,7 @@ int Evaluation::mobilityEval(const Position& pos, std::array<int, 2>& kingSafety
     return interpolateScore(scoreOp, scoreEd, phase);
 }
 
-int Evaluation::pawnStructureEval(const Position& pos, int phase)
+int Evaluation::pawnStructureEval(const Board& pos, int phase)
 {
     auto scoreOp = 0, scoreEd = 0;
 
@@ -298,7 +377,7 @@ int Evaluation::pawnStructureEval(const Position& pos, int phase)
             const auto isolated = !(ownPawns & Bitboards::isolatedPawn(from));
             // 1. There musn't be any own pawns capable of defending the pawn. 
             // 2. The pawn mustn't be blocked by a pawn.
-            // 3. The stop-square of the pawn must be controlled by an enemy pawn.
+            // 3. The stop-Square of the pawn must be controlled by an enemy pawn.
             const auto backward = !(ownPawns & Bitboards::backwardPawn(c, from))
                                && pos.getBoard(from + 8 - 16 * c) != Piece::WhitePawn && pos.getBoard(from + 8 - 16 * c) != Piece::BlackPawn
                                && (Bitboards::pawnAttacks(c, from + 8 - 16 * c) & opponentPawns);
@@ -337,7 +416,7 @@ int Evaluation::pawnStructureEval(const Position& pos, int phase)
     return interpolateScore(scoreOp, scoreEd, phase);
 }
 
-int evaluatePawnShelter(const Position& pos, Color side)
+int evaluatePawnShelter(const Board& pos, Color side)
 {
     static const std::array<int, 8> openFilePenalty = { 6, 5, 4, 4, 4, 4, 5, 6 };
     static const std::array<int, 8> halfopenFilePenalty = { 5, 4, 3, 3, 3, 3, 4, 5 };
@@ -363,7 +442,7 @@ int evaluatePawnShelter(const Position& pos, Color side)
     return penalty;
 }
 
-int Evaluation::kingSafetyEval(const Position& pos, int phase, std::array<int, 2>& kingSafetyScore)
+int Evaluation::kingSafetyEval(const Board& pos, int phase, std::array<int, 2>& kingSafetyScore)
 {
     kingSafetyScore[Color::Black] += evaluatePawnShelter(pos, Color::White);
     kingSafetyScore[Color::White] += evaluatePawnShelter(pos, Color::Black);

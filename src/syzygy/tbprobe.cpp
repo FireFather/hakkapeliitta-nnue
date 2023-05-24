@@ -23,7 +23,7 @@ int Syzygy::maxCardinality = 0;
 // Given a position with 6 or fewer pieces, produce a text string
 // of the form KQPvKRP, where "KQP" represents the white pieces if
 // mirror == 0 and the black pieces if mirror == 1.
-static void prt_str(const Position& pos, char* str, int mirror)
+static void prt_str(const Board& pos, char* str, int mirror)
 {
     Color color = !mirror ? Color::White : Color::Black;
 
@@ -40,7 +40,7 @@ static void prt_str(const Position& pos, char* str, int mirror)
 
 // Given a position, produce a 64-bit material signature key.
 // If the engine supports such a key, it should equal the engine's key.
-static uint64_t calc_key(const Position& pos, int mirror)
+static uint64_t calc_key(const Board& pos, int mirror)
 {
     uint64_t key = 0;
     Color color = !mirror ? Color::White : Color::Black;
@@ -95,7 +95,7 @@ static uint8_t decompress_pairs(struct PairsData *d, uint64_t idx)
 }
 
 // probe_wdl_table and probe_dtz_table require similar adaptations.
-static int probe_wdl_table(const Position& pos, int& success)
+static int probe_wdl_table(const Board& pos, int& success)
 {
     struct TBEntry *ptr;
     struct TBHashEntry *ptr2;
@@ -217,7 +217,7 @@ static int probe_wdl_table(const Position& pos, int& success)
     return ((int)res) - 2;
 }
 
-static int probe_dtz_table(const Position& pos, int wdl, int& success)
+static int probe_dtz_table(const Board& pos, int wdl, int& success)
 {
     struct TBEntry *ptr;
     uint64_t idx;
@@ -356,7 +356,7 @@ static int probe_dtz_table(const Position& pos, int wdl, int& success)
     return res;
 }
 
-static int probe_ab(const Position& pos, int alpha, int beta, int& success)
+static int probe_ab(const Board& pos, int alpha, int beta, int& success)
 {
     int v;
     const auto inCheck = pos.inCheck();
@@ -374,7 +374,7 @@ static int probe_ab(const Position& pos, int alpha, int beta, int& success)
             continue;
         }
 
-        Position newPos(pos);
+        Board newPos(pos);
         newPos.makeMove(move);
         v = -probe_ab(newPos, -beta, -alpha, success);
         if (success == 0) return 0;
@@ -403,7 +403,7 @@ static int probe_ab(const Position& pos, int alpha, int beta, int& success)
     }
 }
 
-int Syzygy::probeWdl(const Position& pos, int& success)
+int Syzygy::probeWdl(const Board& pos, int& success)
 {
     int v;
 
@@ -432,7 +432,7 @@ int Syzygy::probeWdl(const Position& pos, int& success)
             continue;
         }
 
-        Position newPos(pos);
+        Board newPos(pos);
         newPos.makeMove(move);
         int v0 = -probe_ab(newPos , -2, 2, success);
         if (success == 0) return 0;
@@ -472,7 +472,7 @@ int Syzygy::probeWdl(const Position& pos, int& success)
 }
 
 // This routine treats a position with en passant captures as one without.
-static int probe_dtz_no_ep(const Position& pos, int& success)
+static int probe_dtz_no_ep(const Board& pos, int& success)
 {
     int wdl, dtz;
 
@@ -504,7 +504,7 @@ static int probe_dtz_no_ep(const Position& pos, int& success)
                 continue;
             }
 
-            Position newPos(pos);
+            Board newPos(pos);
             newPos.makeMove(move);
             int v = -probe_ab(newPos, -2, -wdl + 1, success);
             if (success == 0) return 0;
@@ -533,7 +533,7 @@ static int probe_dtz_no_ep(const Position& pos, int& success)
                 continue;
             }
 
-            Position newPos(pos);
+            Board newPos(pos);
             newPos.makeMove(move);
             int v = -Syzygy::probeDtz(newPos, success);
             if (success == 0) return 0;
@@ -555,7 +555,7 @@ static int probe_dtz_no_ep(const Position& pos, int& success)
             if (!pos.legal(move, inCheck))
                 continue;
 
-            Position newPos(pos);
+            Board newPos(pos);
             newPos.makeMove(move);
             if (newPos.getFiftyMoveDistance() == 0)
             {
@@ -583,7 +583,7 @@ static int wdl_to_dtz[] =
     -1, -101, 0, 101, 1
 };
 
-int Syzygy::probeDtz(const Position& pos, int& success)
+int Syzygy::probeDtz(const Board& pos, int& success)
 {
     success = 1;
     int v = probe_dtz_no_ep(pos, success);
@@ -609,7 +609,7 @@ int Syzygy::probeDtz(const Position& pos, int& success)
             continue;
         }
 
-        Position newPos(pos);
+        Board newPos(pos);
         newPos.makeMove(move);
         int v0 = -probe_ab(newPos, -2, 2, success);
         if (success == 0) return 0;
@@ -669,7 +669,7 @@ int Syzygy::probeDtz(const Position& pos, int& success)
     return v;
 }
 
-bool Syzygy::rootProbe(const Position& pos, MoveList& rootMoves, int& score)
+bool Syzygy::rootProbe(const Board& pos, MoveList& rootMoves, int& score)
 {
     int success;
 
@@ -681,7 +681,7 @@ bool Syzygy::rootProbe(const Position& pos, MoveList& rootMoves, int& score)
     {
         const auto move = rootMoves.getMove(i);
 
-        Position newPos(pos);
+        Board newPos(pos);
         newPos.makeMove(move);
         int v = 0;
         if (newPos.inCheck() && dtz > 0)
@@ -791,7 +791,7 @@ bool Syzygy::rootProbe(const Position& pos, MoveList& rootMoves, int& score)
     return true;
 }
 
-bool Syzygy::rootProbeWdl(const Position& pos, MoveList& rootMoves, int& score)
+bool Syzygy::rootProbeWdl(const Board& pos, MoveList& rootMoves, int& score)
 {
     int success;
 
@@ -806,7 +806,7 @@ bool Syzygy::rootProbeWdl(const Position& pos, MoveList& rootMoves, int& score)
     {
         const auto move = rootMoves.getMove(i);
 
-        Position newPos(pos);
+        Board newPos(pos);
         newPos.makeMove(move);
         int v = -Syzygy::probeWdl(newPos, success);
         if (!success) return false;

@@ -39,14 +39,14 @@ public:
     /// @param k2 The second killer move.
     /// @param counter The counter move.
     /// @param inCheck Whether the position is in check or not.
-    MoveSort(const Position& pos, const HistoryTable& history, Move ttMove, Move k1, Move k2, Move counter, bool inCheck);
+    MoveSort(const Board& pos, const HistoryTable& history, Move ttMove, Move k1, Move k2, Move counter, bool inCheck);
 
     /// @brief Generates the next best (according to heuristics) move.
     /// @return A move. If there are no more moves, the move is empty.
     Move next();
 
 private:
-    const Position& mPos;
+    const Board& mPos;
     const HistoryTable& mHistoryTable;
     MoveList mMoveList, mTemp;
     Move mTtMove, mKiller1, mKiller2, mCounter;

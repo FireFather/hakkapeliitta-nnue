@@ -54,7 +54,7 @@ int realScoreToTtScore(int score, int ply)
 
 // Used for ordering moves during the quiescence search.
 // Delete as soon as MoveSort works everywhere.
-void Search::orderCaptures(const Position& pos, MoveList& moveList, const Move& ttMove) const
+void Search::orderCaptures(const Board& pos, MoveList& moveList, const Move& ttMove) const
 {
     for (auto i = 0; i < moveList.size(); ++i)
     {
@@ -125,7 +125,7 @@ int futilityMargin(int depth)
 
 // Removes illegal moves from a moveList.
 // Remove after getting MoveSort working everywhere.
-void removeIllegalMoves(const Position& pos, MoveList& moveList, bool inCheck)
+void removeIllegalMoves(const Board& pos, MoveList& moveList, bool inCheck)
 {
     auto marker = 0;
 
@@ -140,7 +140,7 @@ void removeIllegalMoves(const Position& pos, MoveList& moveList, bool inCheck)
     moveList.resize(marker);
 }
 
-void Search::orderRootMoves(const Position& pos, MoveList& moveList, const Move& ttMove) const
+void Search::orderRootMoves(const Board& pos, MoveList& moveList, const Move& ttMove) const
 {
     for (auto i = 0; i < moveList.size(); ++i)
     {
@@ -198,7 +198,7 @@ Search::Search(SearchListener& sl):
     }
 }
 
-bool Search::repetitionDraw(const Position& pos, int ply) const
+bool Search::repetitionDraw(const Board& pos, int ply) const
 {
     const auto limit = std::max(rootPly + ply - pos.getFiftyMoveDistance(), 0);
 
@@ -213,9 +213,9 @@ bool Search::repetitionDraw(const Position& pos, int ply) const
     return false;
 }
 
-std::vector<Move> Search::extractPv(const Position& pos) const
+std::vector<Move> Search::extractPv(const Board& pos) const
 {
-    Position root(pos);
+    Board root(pos);
     std::vector<Move> pv;
     std::unordered_set<HashKey> previousHashes;
 
@@ -250,7 +250,7 @@ std::vector<Move> Search::extractPv(const Position& pos) const
     return pv;
 }
 
-void Search::go(const Position& root, const SearchParameters& sp)
+void Search::go(const Board& root, const SearchParameters& sp)
 {
     std::unique_lock<std::mutex> waitLock(waitMutex);
     tp.addJob(&Search::think, this, root, sp);
@@ -260,14 +260,14 @@ void Search::go(const Position& root, const SearchParameters& sp)
     waitCv.wait(waitLock);
 }
 
-void Search::think(const Position& root, SearchParameters sp)
+void Search::think(const Board& root, SearchParameters sp)
 {
     const auto inCheck = root.inCheck();
     auto alpha = -infinity;
     auto beta = infinity;
     auto delta = aspirationWindow;
     auto score = matedInPly(0);
-    Position pos(root);
+    Board pos(root);
     MoveList rootMoveList;
     std::vector<Move> pv;
     Move bestMove;
@@ -412,7 +412,7 @@ void Search::think(const Position& root, SearchParameters sp)
                                                                       && move != killers.first
                                                                       && move != killers.second;
 
-                Position newPosition(pos);
+                Board newPosition(pos);
                 newPosition.makeMove(move);
                 ss->mCurrentMove = move;
                 if (!movesSearched)
@@ -608,7 +608,7 @@ void Search::think(const Position& root, SearchParameters sp)
 #endif
 
 template <bool pvNode>
-int Search::search(const Position& pos, int depth, int alpha, int beta, bool inCheck, SearchStack* ss)
+int Search::search(const Board& pos, int depth, int alpha, int beta, bool inCheck, SearchStack* ss)
 {
     assert(alpha < beta);
     assert(depth > 0);
@@ -770,7 +770,7 @@ int Search::search(const Position& pos, int depth, int alpha, int beta, bool inC
         {
             repetitionHashes[rootPly + ss->mPly] = pos.getHashKey();
             ss->mCurrentMove = Move();
-            Position newPosition(pos);
+            Board newPosition(pos);
             newPosition.makeNullMove();
             ++nodeCount;
             --nodesToTimeCheck;
@@ -864,7 +864,7 @@ int Search::search(const Position& pos, int depth, int alpha, int beta, bool inC
             continue;
         }
 
-        Position newPosition(pos);
+        Board newPosition(pos);
         newPosition.makeMove(move);
         ss->mCurrentMove = move;
         if (!movesSearched)
@@ -951,7 +951,7 @@ int Search::search(const Position& pos, int depth, int alpha, int beta, bool inC
     return bestScore;
 }
 
-int Search::quiescenceSearch(const Position& pos, int depth, int alpha, int beta, bool inCheck, SearchStack* ss)
+int Search::quiescenceSearch(const Board& pos, int depth, int alpha, int beta, bool inCheck, SearchStack* ss)
 {
     assert(alpha < beta);
     assert(depth <= 0);
@@ -1080,7 +1080,7 @@ int Search::quiescenceSearch(const Position& pos, int depth, int alpha, int beta
             continue;
         }
 
-        Position newPosition(pos);
+        Board newPosition(pos);
         newPosition.makeMove(move);
         const auto score = -quiescenceSearch(newPosition, depth - 1, -beta, -alpha, givesCheck != 0, ss + 1);
 

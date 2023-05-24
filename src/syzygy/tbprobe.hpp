@@ -16,7 +16,7 @@ public:
     //  0 : draw
     //  1 : win, but draw under 50-move rule
     //  2 : win
-    static int probeWdl(const Position& pos, int& success);
+    static int probeWdl(const Board& pos, int& success);
 
     // Probe the DTZ table for a particular position.
     // If success != 0, the probe was successful.
@@ -43,7 +43,7 @@ public:
     //
     // In short, if a move is available resulting in dtz + 50-move-counter <= 99,
     // then do not accept moves leading to dtz + 50-move-counter == 100.
-    static int probeDtz(const Position& pos, int& success);
+    static int probeDtz(const Board& pos, int& success);
 
     // Use the DTZ tables to filter out moves that don't preserve the win or draw.
     // If the position is lost, but DTZ is fairly high, only keep moves that
@@ -51,14 +51,14 @@ public:
     //
     // A return value false indicates that not all probes were successful and that
     // no moves were filtered out.
-    static bool rootProbe(const Position& pos, MoveList& rootMoves, int& score);
+    static bool rootProbe(const Board& pos, MoveList& rootMoves, int& score);
 
     // Use the WDL tables to filter out moves that don't preserve the win or draw.
     // This is a fallback for the case that some or all DTZ tables are missing.
     //
     // A return value false indicates that not all probes were successful and that
     // no moves were filtered out.
-    static bool rootProbeWdl(const Position& pos, MoveList& rootMoves, int& score);
+    static bool rootProbeWdl(const Board& pos, MoveList& rootMoves, int& score);
 
     static int maxCardinality;
 };

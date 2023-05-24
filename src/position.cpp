@@ -46,7 +46,7 @@ const int8_t totalPhase = piecePhase[Piece::Pawn] * 16
                         + piecePhase[Piece::Rook] * 4 
                         + piecePhase[Piece::Queen] * 2;
 
-Position::Position(const std::string& fen)
+Board::Board(const std::string& fen)
 {
     // Split the FEN into parts.
     std::vector<std::string> strList;
@@ -212,17 +212,17 @@ Position::Position(const std::string& fen)
     }
 }
 
-bool Position::isAttacked(Square sq, Color side) const
+bool Board::isAttacked(Square sq, Color side) const
 {
     return (side ? isAttacked<true>(sq, getOccupiedSquares()) : isAttacked<false>(sq, getOccupiedSquares()));
 }
 
-bool Position::isAttacked(Square sq, Color side, Bitboard occupied) const
+bool Board::isAttacked(Square sq, Color side, Bitboard occupied) const
 {
     return (side ? isAttacked<true>(sq, occupied) : isAttacked<false>(sq, occupied));
 }
 
-void Position::makeMove(const Move& m)
+void Board::makeMove(const Move& m)
 {
     assert(pseudoLegal(m, inCheck()) && legal(m, inCheck()));
 
@@ -355,7 +355,7 @@ void Position::makeMove(const Move& m)
     assert(verifyBoardAndBitboards());
 }
 
-void Position::makeNullMove()
+void Board::makeNullMove()
 {
     mSideToMove = !mSideToMove;
     mHashKey ^= Zobrist::turnHashKey();
@@ -370,7 +370,7 @@ void Position::makeNullMove()
 }
 
 template <bool side>
-bool Position::isAttacked(Square sq, Bitboard occupied) const
+bool Board::isAttacked(Square sq, Bitboard occupied) const
 {
     return (Bitboards::knightAttacks(sq) & getBitboard(side, Piece::Knight)
         || Bitboards::pawnAttacks(!side, sq) & getBitboard(side, Piece::Pawn)
@@ -379,7 +379,7 @@ bool Position::isAttacked(Square sq, Bitboard occupied) const
         || Bitboards::kingAttacks(sq) & getBitboard(side, Piece::King));
 }
 
-Bitboard Position::checkBlockers(Color c, Color kingColor) const
+Bitboard Board::checkBlockers(Color c, Color kingColor) const
 {
     assert(c.isOk() && kingColor.isOk());
 
@@ -402,7 +402,7 @@ Bitboard Position::checkBlockers(Color c, Color kingColor) const
     return result;
 }
 
-bool Position::pseudoLegal(const Move& move, bool inCheck) const
+bool Board::pseudoLegal(const Move& move, bool inCheck) const
 {
     const auto from = move.getFrom();
     const auto to = move.getTo();
@@ -544,8 +544,7 @@ bool Position::pseudoLegal(const Move& move, bool inCheck) const
     return true;
 }
 
-
-bool Position::legal(const Move& move, bool inCheck) const
+bool Board::legal(const Move& move, bool inCheck) const
 {
     if (inCheck) return true; // As said before, we assume that when in check we generate legal evasions so legality checking is useless.
 
@@ -574,7 +573,7 @@ bool Position::legal(const Move& move, bool inCheck) const
          || Bitboards::testBit(Bitboards::lineFormedBySquares(from, to), Bitboards::lsb(getBitboard(mSideToMove, Piece::King)));
 }
 
-int Position::givesCheck(const Move& move) const
+int Board::givesCheck(const Move& move) const
 {
     const auto from = move.getFrom();
     const auto to = move.getTo();
@@ -629,7 +628,7 @@ int Position::givesCheck(const Move& move) const
     return 0;
 }
 
-int16_t Position::SEE(const Move& move) const
+int16_t Board::SEE(const Move& move) const
 {
     // Approximate piece values, SEE doesn't need to be as accurate as the main evaluation function.
     // Score for kings is not mateScore due to some annoying wrap-around problems. Doesn't really matter though.
@@ -739,7 +738,7 @@ int16_t Position::SEE(const Move& move) const
     return materialGains[0];
 }
 
-int16_t Position::mvvLva(const Move& move) const
+int16_t Board::mvvLva(const Move& move) const
 {
     static const std::array<int16_t, 12> attackers = {
         5, 4, 3, 2, 1, 0, 5, 4, 3, 2, 1, 0
@@ -764,12 +763,12 @@ int16_t Position::mvvLva(const Move& move) const
     return victimValue * 8 + attackerValue;
 }
 
-bool Position::captureOrPromotion(const Move& move) const
+bool Board::captureOrPromotion(const Move& move) const
 {
     return getBoard(move.getTo()) != Piece::Empty || (move.getFlags() != Piece::Empty && move.getFlags() != Piece::King);
 }
 
-HashKey Position::calculateHash() const
+HashKey Board::calculateHash() const
 {
     auto h = 0ULL;
 
@@ -797,7 +796,7 @@ HashKey Position::calculateHash() const
     return h;
 }
 
-HashKey Position::calculatePawnHash() const
+HashKey Board::calculatePawnHash() const
 {
     auto p = 0ULL;
 
@@ -812,7 +811,7 @@ HashKey Position::calculatePawnHash() const
     return p;
 }
 
-HashKey Position::calculateMaterialHash() const
+HashKey Board::calculateMaterialHash() const
 {
     auto m = 0ULL;
 
@@ -827,7 +826,7 @@ HashKey Position::calculateMaterialHash() const
     return m;
 }
 
-bool Position::verifyPsts() const
+bool Board::verifyPsts() const
 {
     auto correctPstScoreOp = 0, correctPstScoreEd = 0;
 
@@ -843,7 +842,7 @@ bool Position::verifyPsts() const
     return ((mPstScoreOp == correctPstScoreOp) && (mPstScoreEd == correctPstScoreEd));
 }
 
-bool Position::verifyHashKeysAndPhase() const
+bool Board::verifyHashKeysAndPhase() const
 {
     if (mHashKey != calculateHash() || mPawnHashKey != calculatePawnHash() || mMaterialHashKey != calculateMaterialHash())
     {
@@ -859,7 +858,7 @@ bool Position::verifyHashKeysAndPhase() const
     return correctPhase == mGamePhase;
 }
 
-bool Position::verifyPieceCounts() const
+bool Board::verifyPieceCounts() const
 {
     std::array<int, 12> correctPieceCounts;
     correctPieceCounts.fill(0);
@@ -904,7 +903,7 @@ bool Position::verifyPieceCounts() const
     return true;
 }
 
-bool Position::verifyBoardAndBitboards() const
+bool Board::verifyBoardAndBitboards() const
 {
     for (Square sq = Square::A1; sq <= Square::H8; ++sq)
     {

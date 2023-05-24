@@ -35,22 +35,22 @@ public:
     /// @brief Generates pseudo-legal moves.
     /// @param pos The position for which to generate moves.
     /// @param moveList The movelist into which we should put the generated moves.
-    static void generatePseudoLegalMoves(const Position& pos, MoveList& moveList);
+    static void generatePseudoLegalMoves(const Board& pos, MoveList& moveList);
 
     /// @brief Generates legal evasion moves. Should NOT be called if not in check.
     /// @param pos The position for which to generate moves.
     /// @param moveList The movelist into which we should put the generated moves.
-    static void generateLegalEvasions(const Position& pos, MoveList& moveList);
+    static void generateLegalEvasions(const Board& pos, MoveList& moveList);
 
     /// @brief Generates pseudo-legal quiet (i.e. non-capture) moves.
     /// @param pos The position for which to generate moves.
     /// @param moveList The movelist into which we should put the generated moves.
-    static void generatePseudoLegalQuietMoves(const Position& pos, MoveList& moveList);
+    static void generatePseudoLegalQuietMoves(const Board& pos, MoveList& moveList);
 
     /// @brief Generates pseudo-legal capture moves, promotions and quiet checks.
     /// @param pos The position for which to generate moves.
     /// @param moveList The movelist into which we should put the generated moves.
-    static void generatePseudoLegalCapturesAndQuietChecks(const Position& pos, MoveList& moveList);
+    static void generatePseudoLegalCapturesAndQuietChecks(const Board& pos, MoveList& moveList);
 
     /// @brief Generates pseudo-legal capture moves and promotions.
     /// @param pos The position for which to generate moves.
@@ -59,7 +59,7 @@ public:
     ///
     /// In the quiescence search generating underpromotions is a waste of time.
     /// On the other hand, in the main search NOT generating underpromotions could potentially have disastrous effects.
-    static void generatePseudoLegalCaptures(const Position& pos, MoveList& moveList, bool underPromotions);
+    static void generatePseudoLegalCaptures(const Board& pos, MoveList& moveList, bool underPromotions);
 };
 
 #endif

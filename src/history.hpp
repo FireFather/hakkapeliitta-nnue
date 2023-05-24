@@ -36,19 +36,19 @@ public:
     /// @param pos The position.
     /// @param move The move.
     /// @param depth The depth.
-    void addCutoff(const Position& pos, const Move& move, int depth);
+    void addCutoff(const Board& pos, const Move& move, int depth);
 
     /// @brief Update the score of a move which FAILED to cause a beta cutoff in a confirmed CUT-node.
     /// @param pos The position.
     /// @param move The move.
     /// @param depth The depth.
-    void addNotCutoff(const Position& pos, const Move& move, int depth);
+    void addNotCutoff(const Board& pos, const Move& move, int depth);
 
     /// @brief Get the history score for a given move in a given position.
     /// @param pos The position.
     /// @param move The move.
     /// @return The score. We use 16 bits because a move is encoded as 16 bits and so we have a nice pair of 32 bits.
-    int16_t getScore(const Position& pos, const Move& move) const;
+    int16_t getScore(const Board& pos, const Move& move) const;
 
     /// @brief Clears the history table.
     void clear();
