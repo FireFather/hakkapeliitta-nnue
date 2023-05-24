@@ -8,9 +8,7 @@ The executable (hakkapelitta.exe) and very strong nnue binary (nn.bin) are locat
 
 For variety, any halfkp_256x2-32-32 NNUE can be used...see:
 
-https://github.com/FireFather/halfkp_256x2-32-32-nets 
-
-or
+https://github.com/FireFather/halfkp_256x2-32-32-nets or
 
 https://tests.stockfishchess.org/nns for a different net.
 
