@@ -1,4 +1,10 @@
-﻿### Overview
+### Hakkapelitta nnue
+
+I've added support for a NNUE (halfkp_256x2-32-32) evaluation (nn.bin) via Daniel Shawul's nnue-probe library: https://github.com/dshawul/nnue-probe.
+The executable has been produced using Visual Studio 2022...the project files have been included.
+The executable (hakkapelitta.exe) and nnue binary (nn.bin) are located together in x64/Release folder.
+
+### Overview
 
 Hakkapeliitta is an UCI chess engine written in C++11/14 with support for Syzygy tablebases. Version 3.0 has a rating of around 2950 at CCRL and 2820 at CEGT, making it approximately the 20th strongest chess engine in the world on a single thread. 
 
