@@ -1,6 +1,6 @@
 ### Hakkapelitta nnue
 
-I've added support for a NNUE (halfkp_256x2-32-32) evaluation (nn.bin) via Daniel Shawul's nnue-probe library: https://github.com/dshawul/nnue-probe.
+I've added support for an external NNUE (halfkp_256x2-32-32) evaluation (nn.bin) via Daniel Shawul's nnue-probe library: https://github.com/dshawul/nnue-probe.
 
 The executable has been produced using Visual Studio 2022...the project files have been included.
 
