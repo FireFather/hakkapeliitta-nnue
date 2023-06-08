@@ -16,8 +16,8 @@ Compatible nnue nets start on page 72-73 (approx.) with dates of 21-05-02 22:26:
 
 The nnue file size must = 20,530 KB (halfkp_256x2-32-32).
 
-![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/master/logos/hakkapeliitta-1.bmp)
-![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/master/logos/hakkapeliitta-2.bmp)
+![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/tree/master/logos/hakkapeliitta-1.bmp)
+![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/tree/master/logos/hakkapeliitta-2.bmp)
 
 ### Overview
 
