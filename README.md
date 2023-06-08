@@ -16,6 +16,9 @@ Compatible nnue nets start on page 72-73 (approx.) with dates of 21-05-02 22:26:
 
 The nnue file size must = 20,530 KB (halfkp_256x2-32-32).
 
+![alt tag](https://raw.githubusercontent.com/FireFather/fire-NN/master/logos/hakkapeliitta-1.bmp)
+![alt tag](https://raw.githubusercontent.com/FireFather/fire-NN/master/logos/hakkapeliitta-2.bmp)
+
 ### Overview
 
 Hakkapeliitta is an UCI chess engine written in C++11/14 with support for Syzygy tablebases. Version 3.0 has a rating of around 2950 at CCRL and 2820 at CEGT, making it approximately the 20th strongest chess engine in the world on a single thread. 
