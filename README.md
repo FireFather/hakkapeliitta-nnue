@@ -1,7 +1,7 @@
 ### Hakkapeliitta nnue
 
-![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/master/logos/hakkapeliitta-1.bmp)
-![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/master/logos/hakkapeliitta-2.bmp)
+![alt tag](https://raw.githubusercontent.com/FireFather/hakkapeliitta-nnue/master/logos/hakkapeliitta-1.bmp)
+![alt tag](https://raw.githubusercontent.com/FireFather/hakkapeliitta-nnue/master/logos/hakkapeliitta-2.bmp)
 
 Support added for an external NNUE (halfkp_256x2-32-32) evaluation (nn.bin) via Daniel Shawul's nnue-probe library: https://github.com/dshawul/nnue-probe.
 
