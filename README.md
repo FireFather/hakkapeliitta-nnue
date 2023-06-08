@@ -1,5 +1,8 @@
 ### Hakkapelitta nnue
 
+![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/master/logos/hakkapelitta-1.bmp)
+![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/master/logos/hakkapelitta-2.bmp)
+
 Support added for an external NNUE (halfkp_256x2-32-32) evaluation (nn.bin) via Daniel Shawul's nnue-probe library: https://github.com/dshawul/nnue-probe.
 
 The executable has been produced using Visual Studio 2022...the project files have been included.
@@ -15,10 +18,6 @@ https://tests.stockfishchess.org/nns for a different net.
 Compatible nnue nets start on page 72-73 (approx.) with dates of 21-05-02 22:26:43 or earlier.
 
 The nnue file size must = 20,530 KB (halfkp_256x2-32-32).
-
-
-![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/master/logos/hakkapelitta-1.bmp)
-![alt tag](https://raw.githubusercontent.com/FireFather/hakkapelitta-nnue/master/logos/hakkapelitta-2.bmp)
 
 ### Overview
 
